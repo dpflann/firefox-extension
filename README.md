@@ -344,3 +344,9 @@ You can style the buttons and other various aspects of your extension.
 	}
 
 You can pack used graphics in this directory. The example includes `status-bar.png` and `toolbar-large.png.` next to the `skin.css` file.
+
+
+
+## Tips & Tricks ##
+
+- You can open the error console by pressing `Shift+Command+J`
