@@ -345,8 +345,50 @@ You can style the buttons and other various aspects of your extension.
 
 You can pack used graphics in this directory. The example includes `status-bar.png` and `toolbar-large.png.` next to the `skin.css` file.
 
+## Packaging ##
 
+On OSX
+	
+	cd ~/Development/projects/firefox-extension
+	zip -r LinkTargetFinder.xpi *
+
+On Linux
+
+	cd ~/Development/projects/firefox-extension
+	
 
 ## Tips & Tricks ##
 
 - You can open the error console by pressing `Shift+Command+J`
+
+## Problems ##
+
+### Errors when reading install.rdf ###
+
+During development weird eror messages popped up, when Firefox tried to read the install.rdf
+
+	Error: 
+	Source File: jar:file:///Users/Oliver/Development/projects/personal/firefox-extension/LinkTargetFinder.xpi!/install.rdf
+	Line: 4, Column: 53
+	Source Code:
+	     xmlns:em="http://www.mozilla.org/2004/em-RDF#">
+
+and
+
+		Warning: WARN addons.xpi: Invalid XPI: Error: No ID in install manifest
+		Source File: resource:///modules/XPIProvider.jsm
+		Line: 647
+
+An empty error message wasn't very helpful. Indeed the error was very subtle. 
+
+I had written
+
+	<RDF xmlns="http://www.w3.org/1999/02/22-RDF-syntax-ns#"
+	     xmlns:em="http://www.mozilla.org/2004/em-RDF#">
+		<Description about="urn:mozilla:install-manifest">
+
+as the root element, but it needs to be all lowercase
+
+	<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+		<Description about="urn:mozilla:install-manifest">
