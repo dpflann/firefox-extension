@@ -41,9 +41,9 @@ Create the basic directory layout
 	mdkir extension
 	cd extension
 	mkdir -p chrome/content
-	touch chrome/chrome.manifest
+	touch chrome.manifest
 	mkdir -p defaults/preferences
-	touch defaults/install.rdf
+	touch install.rdf
 	mkdir -p locale/en-US
 	mkdir skin
 
