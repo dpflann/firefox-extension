@@ -89,7 +89,7 @@ In the `Description` node
 - `em:optionsURL` The Chrome URL to where you will have your file for editing options/preferences.
 
 In the `Description/em:targetApplication` node
-- `em:id` Id of Firefox applciation
+- `em:id` Id of Firefox application
 - `em:minVersion` Minimum version of Firefox required to run the extension. [Valid Application Versions](https://addons.mozilla.org/en-US/firefox/pages/appversions).
 - `em:maxVersion`
 	The maximum version of Firefox required to run the extension. [Valid Application Versions](https://addons.mozilla.org/en-US/firefox/pages/appversions).
@@ -132,3 +132,207 @@ and will be named with letters and numbers, a dot (.) and finally followed by th
 In this folder there is a folder called `extensions`. In it, create a file with a unique name for you (this will have to be the same as you chose for your `em:id` value in your install.rdf file).
 
 In the case of the example, create a file named `linktargetfinder@robertnyman.com`, without any extension, and in it just point it to where you will have your code, e.g. `C:\extensions\` (Windows) or `~/Sites/linktargetfinder/` (Mac, Linux).
+
+## Development ##
+
+XUL  stands for XML User Interface Language. It is developed by Mozilla to create interfaces in Firefox, Thunderbird etc.
+
+	# override some of the default look of the web browser
+	$ touch chrome/content/browser.xul
+	
+	# used for the options/preferences dialog for your extension, and its path is pointed out in the install.rdf file in the Description/em:optionsURL node
+	$ touch chrome/content/options.xul
+	
+	# logic of the extension
+	$ touch chrome/content/linkTargetFinder.js
+
+### browser.xul ###
+
+Override the look of the web browser, i.e. add a button to the toolbar, an item to the Tools menu and a statusbar icon. For a reference check [here](https://developer.mozilla.org/en/XUL_Reference).
+
+	<?xml version="1.0"?>
+	<?xml-stylesheet href="chrome://linktargetfinder/skin/skin.css" type="text/css"?>
+	<!DOCTYPE linktargetfinder SYSTEM "chrome://linktargetfinder/locale/translations.dtd">
+	<overlay id="sample" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+			<script src="linkTargetFinder.js" />
+
+			<menupopup id="menu_ToolsPopup">
+				<menuitem label="&runlinktargetfinder;" key="link-target-finder-run-key" oncommand="linkTargetFinder.run()"/>
+			</menupopup>
+
+			<keyset>
+				<key id="link-target-finder-run-key" modifiers="accel alt shift" key="L" oncommand="linkTargetFinder.run()"/>
+			</keyset>
+
+			<statusbar id="status-bar">
+				<statusbarpanel id="link-target-finder-status-bar-icon" class="statusbarpanel-iconic" src="chrome://linktargetfinder/skin/status-bar.png" tooltiptext="&runlinktargetfinder;" onclick="linkTargetFinder.run()" />
+			</statusbar>
+
+			<toolbarpalette id="BrowserToolbarPalette">
+				<toolbarbutton id="link-target-finder-toolbar-button" label="Link Target Finder" tooltiptext="&runlinktargetfinder;" oncommand="linkTargetFinder.run()"/>
+			</toolbarpalette>
+	</overlay>
+
+#### Add a menu option ####
+
+Adding a menu option to the Tools menu, and connect it to a keyboard shortcut:
+
+	<menupopup id="menu_ToolsPopup">
+		<menuitem label="&runlinktargetfinder;" key="link-target-finder-run-key" oncommand="linkTargetFinder.run()"/>
+	</menupopup>
+
+	<keyset>
+		<key id="link-target-finder-run-key" modifiers="accel alt shift" key="L" oncommand="linkTargetFinder.run()"/>
+	</keyset>
+
+#### Add icon to statusbar ####
+
+	<statusbar id="status-bar">
+		<statusbarpanel id="link-target-finder-status-bar-icon" class="statusbarpanel-iconic" src="chrome://linktargetfinder/skin/status-bar.png" tooltiptext="&runlinktargetfinder;" onclick="linkTargetFinder.run()" />
+	</statusbar>
+	
+#### Add a button to the toolbar ####
+
+<toolbarpalette id="BrowserToolbarPalette">
+	<toolbarbutton id="link-target-finder-toolbar-button" label="Link Target Finder" tooltiptext="&runlinktargetfinder;" oncommand="linkTargetFinder.run()"/>
+</toolbarpalette>
+
+Note that you need to go to View > Toolbars > Customise… to add your button to the visible toolbar.
+
+### options.xul ###
+
+Used for the options/preferences dialog for your extension, and its path is pointed out in the `install.rdf` file in the `Description/em:optionsURL` node
+
+	<?xml version="1.0"?>
+	<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+	<prefwindow
+	     title="Link Target Finder Preferences"
+	     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+		<prefpane label="Link Target Finder Preferences">
+			<preferences>
+				<preference id="link-target-finder-autorun" name="extensions.linktargetfinder.autorun" type="bool"/>
+			</preferences>
+
+			<groupbox>
+				<caption label="Settings"/>
+				<grid>
+					<columns>
+						<column flex="4"/>
+						<column flex="1"/>
+					</columns>
+					<rows>
+						<row>
+							<label control="autorun" value="Autorun"/>
+							<checkbox id="autorun" preference="link-target-finder-autorun"/>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>	
+
+		</prefpane>
+
+	</prefwindow>
+
+### linkTargetFinder.js ###
+
+When the window loads, it runs the init method of the `linkTargetFinder` object. If the preference autorun is set to true, it calls its run method immediately. Otherwise, it will only be called when the toolbar button, menu item or statusbar icon is clicked. This happens through the `oncommand` attribute on the elements in the `browser.xul` file.
+
+The code in the run method is pretty straight-forward. It adds a CSS file from the extensions chrome folder to the current document, finds all links in it, loops through them and checks if they have a target attribute, counts those, highlights them and alerts you with the number of hits.
+
+As you can see, there’s a pointer in the code to something called gBrowser. That is how to get a reference to the current web browser, and you could also use `getBrowser()` as well. Note that this sort of code is only available from within the XUL context of the web browser. More information and options can be found in [Tabbed Browser](https://developer.mozilla.org/en/Code_snippets/Tabbed_browser).
+
+	var linkTargetFinder = function () {
+		var prefManager = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+		return {
+			init : function () {
+				gBrowser.addEventListener("load", function () {
+					var autoRun = prefManager.getBoolPref("extensions.linktargetfinder.autorun");
+					if (autoRun) {
+						linkTargetFinder.run();
+					}
+				}, false);
+			},
+
+			run : function () {
+				var head = content.document.getElementsByTagName("head")[0],
+					style = content.document.getElementById("link-target-finder-style"),
+					allLinks = content.document.getElementsByTagName("a"),
+					foundLinks = 0;
+
+				if (!style) {
+					style = content.document.createElement("link");
+					style.id = "link-target-finder-style";
+					style.type = "text/css";
+					style.rel = "stylesheet";
+					style.href = "chrome://linktargetfinder/skin/skin.css";
+					head.appendChild(style);
+				}	
+
+				for (var i=0, il=allLinks.length; i<il; i++) {
+					elm = allLinks[i];
+					if (elm.getAttribute("target")) {
+						elm.className += ((elm.className.length > 0)? " " : "") + "link-target-finder-selected";
+						foundLinks++;
+					}
+				}
+				if (foundLinks === 0) {
+					alert("No links found with a target attribute");
+				}
+				else {
+					alert("Found " + foundLinks + " links with a target attribute");
+				}
+			}
+		};
+	}();
+	window.addEventListener("load", linkTargetFinder.init, false);
+	
+The only unusual part for a JavaScript is the variable prefManager, which connects to Firefox preference manager, and later gets the autorun preference with the help of this code:
+
+	var autoRun = prefManager.getBoolPref("extensions.linktargetfinder.autorun");
+	
+The three types of extension preferences are string, integer and boolean, and the six methods to work with them are:
+
+- `getBoolPref()`
+- `setBoolPref()`
+- `getCharPref()`
+- `setCharPref()`
+- `getIntPref()`
+- `setIntPref()`
+
+### defaults directory ###
+
+Default preferences for the extension
+
+	$ touch defaults/pref.js
+	$ echo 'pref("extensions.linktargetfinder.autorun", false);' > defaults/pref.js
+
+### locale directory ###
+
+Used for localisation. On child directory for each language. In this case we only have on `en-US`. Each language directory contains a `translations.dtd` file.
+
+For example  `&runlinktargetfinder;` in the `browser.xul` gets the translation in such a file.
+
+	$ touch locale/en-US/translations.dtd
+	echo '<!ENTITY runlinktargetfinder "Run Link Target Finder">' > locale/en-US/translations.dtd
+
+## #skin directory ###
+
+You can style the buttons and other various aspects of your extension.
+
+	$ touch skin/skin.css
+	#link-target-finder-toolbar-button {
+		list-style-image: url("chrome://linktargetfinder/skin/toolbar-large.png");
+	}
+
+	#link-target-finder-status-bar-icon {
+		width: 83px;
+		margin: 0 5px;
+	}
+
+	.link-target-finder-selected {
+		outline: 2px solid red !important;
+	}
+	
+You can pack used graphics in this directory. The example includes `status-bar.png` and `toolbar-large.png.` next to the `skin.css` file.
