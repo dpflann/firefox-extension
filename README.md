@@ -26,9 +26,9 @@ Open Firefox with your development profile. Enter `about:config` in the address 
 
 These are the recommended settings. They  enable extension errors in the Firefox Error Console (`Tools > Error Console`), disable XUL caching and such.
 
-	javascript.options.showInConsole = true
-	nglayout.debug.disable_xul_cache = true
-	browser.dom.window.dump.enabled = true
+	javascript.options.showInConsole = true // was already set to true
+	nglayout.debug.disable_xul_cache = true // had to create a new boolean value
+	browser.dom.window.dump.enabled = true // had to create a new boolean value
 
 ### Extension Directory ###
 
