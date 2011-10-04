@@ -87,7 +87,7 @@ In the `Description` node
 - `em:creator` Name of developer
 - `em:description` Describes your extension functionality. Will be shown in the Tools > Add-ons window.
 - `em:homepageURL` The URL of your extension’s web site.
-- `em:optionsURL` The Chrome URL to where you will have your file for editing options/preferences.
+- `em:optionsURL` The Chrome URL to where you will have your file for editing `options/preferences`.
 
 In the `Description/em:targetApplication` node
 - `em:id` Id of Firefox application
