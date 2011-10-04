@@ -36,6 +36,8 @@ These are the recommended settings. They  enable extension errors in the Firefox
 
 Create the basic directory layout
 
+	cd ~/Development/projects
+
 	mdkir extension
 	cd extension
 	mkdir -p chrome/content
@@ -121,7 +123,7 @@ For now we don't care about what the options mean. The interested can take a loo
 Instead of keeping to reinstall new versions of your extension, you can point to the directory where you keep your extension project directory (which of course is under version control). The profiles are stored under
 	
 	## on OSX
-	$ cd ~/Library/Application Support/Firefox/Profiles
+	$ cd ~/Library/Application\ Support/Firefox/Profiles
 	
 	## on Linux
 	$ cd ~/.mozilla/firefox
@@ -131,6 +133,14 @@ and will be named with letters and numbers, a dot (.) and finally followed by th
 In this folder there is a folder called `extensions`. In it, create a file with a unique name for you (this will have to be the same as you chose for your `em:id` value in your install.rdf file).
 
 In the case of the example, create a file named `linktargetfinder@robertnyman.com`, without any extension, and in it just point it to where you will have your code, e.g. `C:\extensions\` (Windows) or `~/Sites/linktargetfinder/` (Mac, Linux).
+
+For example (your profile id and project directory might differ):
+
+	## on OSX
+	echo "~/Development/projects/firefox-extension" > ~/Library/Application\ Support/Firefox/Profiles/ml3hqay8.development/linktargetfinder@robertnyman.com
+	
+	## on Linux
+	echo "~/Development/projects/firefox-extension" > ~/.mozilla/firefox/ml3hqay8.development/linktargetfinder@robertnyman.com
 
 ## Development ##
 
