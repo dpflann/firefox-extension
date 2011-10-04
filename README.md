@@ -1,6 +1,6 @@
 # Developing a Firefox Extension #
 
-The example is taken from [Robert Nyman](http://blog.mozilla.com/addons/2009/01/28/how-to-develop-a-firefox-extension/). The goal is to write a simple extension that will show you an alert of the number of all links with a `target` attribute.
+The example is taken from [Robert Nyman](http://robertnyman.com/2009/01/24/how-to-develop-a-firefox-extension/). The goal is to write a simple extension that will show you an alert of the number of all links with a `target` attribute.
 
 Extensions are different from plugins, which help the browser display specific content like playing multimedia files. Extensions are also different from search plugins, which plug additional search engines in the search bar.
 
