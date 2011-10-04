@@ -6,11 +6,11 @@ Extensions are different from plugins, which help the browser display specific c
 
 ## Setup ##
 
-## Development profile ##
+### Development profile ###
 
 You need a working installation of [Firefox](http://www.mozilla.org/firefox/)
 
-It is a good to create a development profile
+It is a good idea to create a development profile
 
 	# on OSX
 	$ /Applications/Firefox.app/Contents/MacOS/firefox -profilemanager
@@ -24,9 +24,7 @@ Choose `Create Profile` in the dialog and follow the steps.
 
 Open Firefox with your development profile. Enter `about:config` in the address bar. 
 
-Recommended settings
-
-These are good to enable extension errors in the Firefox Error Console (Tools > Error Console), disable XUL caching and such.
+These are the recommended settings. They  enable extension errors in the Firefox Error Console (`Tools > Error Console`), disable XUL caching and such.
 
 	javascript.options.showInConsole = true
 	nglayout.debug.disable_xul_cache = true
@@ -35,6 +33,8 @@ These are good to enable extension errors in the Firefox Error Console (Tools > 
 ### Extension Directory ###
 
 #### Basic Directory Structure ####
+
+Create the basic directory layout
 
 	mdkir extension
 	cd extension
@@ -76,7 +76,7 @@ These are good to enable extension errors in the Firefox Error Console (Tools > 
 		</Description>
 	</RDF>
 
-Explanation of tags
+**Explanation of tags**
 
 In the `Description` node
 - `em:id` Unique developer id, of your own choosing. Also used for pointing to this extension (see below)
@@ -101,10 +101,9 @@ Taken from [here](https://addons.mozilla.org/en-US/firefox/pages/appversions)
 - GUID: `{ec8030f7-c20a-464f-9b0e-13a3a9e97384}`
 - Versions: `0.3`, `0.6`, `0.7`, `0.7+`, `0.8`, `0.8+`, `0.9`, `0.9.0+`, `0.9.1+`, `0.9.2+`, `0.9.3`, `0.9.3+`, `0.9.x`, `0.9+`, `0.10`, `0.10.1`, `0.10+`, `1.0`, `1.0.1`, `1.0.2`, `1.0.3`, `1.0.4`, `1.0.5`, `1.0.6`, `1.0.7`, `1.0.8`, `1.0+`, `1.4.0`, `1.4`, `1.4.1`, `1.5b1`, `1.5b2`, `1.5`, `1.5.0.4`, `1.5.0.*`, `2.0a1`, `2.0a2`, `2.0a3`, `2.0b1`, `2.0b2`, `2.0`, `2.0.0.4`, `2.0.0.8`, `2.0.0.*`, `3.0a1`, `3.0a2`, `3.0a3`, `3.0a4`, `3.0a5`, `3.0a6`, `3.0a7`, `3.0a8pre`, `3.0a8`, `3.0a9`, `3.0b1`, `3.0b2pre`, `3.0b2`, `3.0b3pre`, `3.0b3`, `3.0b4pre`, `3.0b4`, `3.0b5pre`, `3.0b5`, `3.0pre`, `3.0`, `3.0.9`, `3.0.11`, `3.0.12`, `3.0.*`, `3.1a1pre`, `3.1a1`, `3.1a2pre`, `3.1a2`, `3.1b1pre`, `3.1b1`, `3.1b2pre`, `3.1b2`, `3.1b3pre`, `3.1b3`, `3.5b4pre`, `3.5b4`, `3.5b5pre`, `3.5`, `3.5.*`, `3.6a1pre`, `3.6a1`, `3.6a2pre`, `3.6b1pre`, `3.6b2`, `3.6`, `3.6.4`, `3.6.*`, `3.7a1pre`, `3.7a1`, `3.7a2pre`, `3.7a2`, `3.7a3pre`, `3.7a3`, `3.7a4pre`, `3.7a4`, `3.7a5pre`, `3.7a5`, `3.7a6pre`, `4.0b1`, `4.0b2pre`, `4.0b2`, `4.0b3pre`, `4.0b3`, `4.0b4pre`, `4.0b4`, `4.0b5pre`, `4.0b5`, `4.0b6pre`, `4.0b6`, `4.0b7pre`, `4.0b7`, `4.0b8pre`, `4.0b8`, `4.0b9pre`, `4.0b9`, `4.0b10pre`, `4.0b10`, `4.0b11pre`, `4.0b11`, `4.0b12pre`, `4.0b12`, `4.0`, `4.0.*`, `4.2a1pre`, `5.0a2`, `5.0`, `5.*`, `6.0a1`, `6.0a2`, `6.0`, `6.*`, `7.0a1`, `7.0a2`, `7.0`, `7.*`, `8.0a1`, `8.0a2`, `8.0`, `8.*`, `9.0a1`, `9.0a2`, `9.0`, `9.*`, `10.0a1`
 
-
 #### chrome.manifest ####
 
-The chrome of Firefox is everything around the content window. i.e. web browser toolbar, menus, statusbar etc. The next file for our extension, which will probably feel a bit awkward to edit, is the `chrome.mainfest` file. This one, however, is in conjunction with `install.rdf` the key to how your extension will be added to Firefox, and how it will work.
+The chrome of Firefox is everything around the content window. i.e. web browser toolbar, menus, statusbar etc. `chrome.mainfest` is in conjunction with `install.rdf` the key to how your extension will be added to Firefox, and how it will work.
 
 	content     linktargetfinder    chrome/content/
 	content     linktargetfinder    chrome/content/ contentaccessible=yes
@@ -119,7 +118,7 @@ For now we don't care about what the options mean. The interested can take a loo
 
 #### Pointing to development directory ####
 
-Instead of keeping reinstalling new versions of your extension, you can point to the directory where you keep your extension project directory (which of course is under version control). The profiles are stored under
+Instead of keeping to reinstall new versions of your extension, you can point to the directory where you keep your extension project directory (which of course is under version control). The profiles are stored under
 	
 	## on OSX
 	$ cd ~/Library/Application Support/Firefox/Profiles
@@ -135,7 +134,7 @@ In the case of the example, create a file named `linktargetfinder@robertnyman.co
 
 ## Development ##
 
-XUL  stands for XML User Interface Language. It is developed by Mozilla to create interfaces in Firefox, Thunderbird etc.
+XUL stands for XML User Interface Language. It is developed by Mozilla to create interfaces in Firefox, Thunderbird etc.
 
 	# override some of the default look of the web browser
 	$ touch chrome/content/browser.xul
@@ -292,7 +291,7 @@ The only unusual part for a JavaScript is the variable prefManager, which connec
 
 	var autoRun = prefManager.getBoolPref("extensions.linktargetfinder.autorun");
 	
-The three types of extension preferences are string, integer and boolean, and the six methods to work with them are:
+The three types of extension preferences are `string`, `integer` and `boolean`, and the six methods to work with them are:
 
 - `getBoolPref()`
 - `setBoolPref()`
@@ -317,7 +316,7 @@ For example  `&runlinktargetfinder;` in the `browser.xul` gets the translation i
 	$ touch locale/en-US/translations.dtd
 	echo '<!ENTITY runlinktargetfinder "Run Link Target Finder">' > locale/en-US/translations.dtd
 
-## #skin directory ###
+### skin directory ###
 
 You can style the buttons and other various aspects of your extension.
 
