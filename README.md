@@ -14,17 +14,17 @@ It is a good idea to create a development profile
 
 	# on OSX
 	$ /Applications/Firefox.app/Contents/MacOS/firefox -profilemanager
-	
+
 	# on Linux
 	$ ./firefox -profilemanager
-	
+
 Choose `Create Profile` in the dialog and follow the steps.
 
 ### Configuration Settings ###
 
-Open Firefox with your development profile. Enter `about:config` in the address bar. 
+Open Firefox with your development profile. Enter `about:config` in the address bar.
 
-These are the recommended settings. They  enable extension errors in the Firefox Error Console (`Tools > Error Console`), disable XUL caching and such.
+These are the recommended settings. They enable extension errors in the Firefox Error Console (`Tools > Error Console`), disable XUL caching and such.
 
 	javascript.options.showInConsole = true // was already set to true
 	nglayout.debug.disable_xul_cache = true // had to create a new boolean value
@@ -48,11 +48,10 @@ Create the basic directory layout
 	mkdir skin
 
 #### install.rdf ####
-	
+
 	<?xml version="1.0"?>
 
-	<RDF xmlns="http://www.w3.org/1999/02/22-RDF-syntax-ns#"
-	     xmlns:em="http://www.mozilla.org/2004/em-RDF#">
+	<RDF xmlns="http://www.w3.org/1999/02/22-RDF-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-RDF#">
 
 		<Description about="urn:mozilla:install-manifest">
 			<em:id>linktargetfinder@robertnyman.com</em:id>
@@ -82,7 +81,7 @@ Create the basic directory layout
 
 In the `Description` node
 - `em:id` Unique developer id, of your own choosing. Also used for pointing to this extension (see below)
-- `em:name`  Name of extension.
+- `em:name` Name of extension.
 - `em:version` Current version of your extension.
 - `em:type` The type declares that is an extension, as opposed to, for instance, a theme.
 - `em:creator` Name of developer
@@ -107,9 +106,9 @@ Taken from [here](https://addons.mozilla.org/en-US/firefox/pages/appversions)
 
 The chrome of Firefox is everything around the content window. i.e. web browser toolbar, menus, statusbar etc. `chrome.mainfest` is in conjunction with `install.rdf` the key to how your extension will be added to Firefox, and how it will work.
 
-	content     linktargetfinder    chrome/content/
-	content     linktargetfinder    chrome/content/ contentaccessible=yes
-	overlay chrome://browser/content/browser.xul chrome://linktargetfinder/content/browser.xul
+	content	linktargetfinder	chrome/content/
+	content	linktargetfinder	chrome/content/	contentaccessible=yes
+	overlay	chrome://browser/content/browser.xul	chrome://linktargetfinder/content/browser.xul
 
 	locale	linktargetfinder	en-US	locale/en-US/
 
@@ -121,13 +120,13 @@ For now we don't care about what the options mean. The interested can take a loo
 #### Pointing to development directory ####
 
 Instead of keeping to reinstall new versions of your extension, you can point to the directory where you keep your extension project directory (which of course is under version control). The profiles are stored under
-	
+
 	## on OSX
 	$ cd ~/Library/Application\ Support/Firefox/Profiles
-	
+
 	## on Linux
 	$ cd ~/.mozilla/firefox
-	
+
 and will be named with letters and numbers, a dot (.) and finally followed by the profile name.
 
 In this folder there is a folder called `extensions`. In it, create a file with a unique name for you (this will have to be the same as you chose for your `em:id` value in your install.rdf file).
@@ -139,7 +138,7 @@ For example (your profile id and project directory might differ):
 	## on OSX
 	mkdir -p ~/Library/Application\ Support/Firefox/Profiles/ml3hqay8.development/extensions
 	echo "~/Development/projects/firefox-extension" > ~/Library/Application\ Support/Firefox/Profiles/ml3hqay8.development/extensions/linktargetfinder@robertnyman.com
-	
+
 	## on Linux
 	mkdir -p ~/.mozilla/firefox/ml3hqay8.development/extensions
 	echo "~/Development/projects/firefox-extension" > ~/.mozilla/firefox/ml3hqay8.development/extensions/linktargetfinder@robertnyman.com
@@ -150,10 +149,10 @@ XUL stands for XML User Interface Language. It is developed by Mozilla to create
 
 	# override some of the default look of the web browser
 	$ touch chrome/content/browser.xul
-	
+
 	# used for the options/preferences dialog for your extension, and its path is pointed out in the install.rdf file in the Description/em:optionsURL node
 	$ touch chrome/content/options.xul
-	
+
 	# logic of the extension
 	$ touch chrome/content/linkTargetFinder.js
 
@@ -201,7 +200,7 @@ Adding a menu option to the Tools menu, and connect it to a keyboard shortcut:
 	<statusbar id="status-bar">
 		<statusbarpanel id="link-target-finder-status-bar-icon" class="statusbarpanel-iconic" src="chrome://linktargetfinder/skin/status-bar.png" tooltiptext="&runlinktargetfinder;" onclick="linkTargetFinder.run()" />
 	</statusbar>
-	
+
 #### Add a button to the toolbar ####
 
 <toolbarpalette id="BrowserToolbarPalette">
@@ -217,9 +216,7 @@ Used for the options/preferences dialog for your extension, and its path is poin
 	<?xml version="1.0"?>
 	<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 
-	<prefwindow
-	     title="Link Target Finder Preferences"
-	     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<prefwindow title="Link Target Finder Preferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 		<prefpane label="Link Target Finder Preferences">
 			<preferences>
@@ -240,7 +237,7 @@ Used for the options/preferences dialog for your extension, and its path is poin
 						</row>
 					</rows>
 				</grid>
-			</groupbox>	
+			</groupbox>
 
 		</prefpane>
 
@@ -279,7 +276,7 @@ As you can see, there’s a pointer in the code to something called gBrowser. Th
 					style.rel = "stylesheet";
 					style.href = "chrome://linktargetfinder/skin/skin.css";
 					head.appendChild(style);
-				}	
+				}
 
 				for (var i=0, il=allLinks.length; i<il; i++) {
 					elm = allLinks[i];
@@ -298,11 +295,11 @@ As you can see, there’s a pointer in the code to something called gBrowser. Th
 		};
 	}();
 	window.addEventListener("load", linkTargetFinder.init, false);
-	
+
 The only unusual part for a JavaScript is the variable prefManager, which connects to Firefox preference manager, and later gets the autorun preference with the help of this code:
 
 	var autoRun = prefManager.getBoolPref("extensions.linktargetfinder.autorun");
-	
+
 The three types of extension preferences are `string`, `integer` and `boolean`, and the six methods to work with them are:
 
 - `getBoolPref()`
@@ -323,7 +320,7 @@ Default preferences for the extension
 
 Used for localisation. On child directory for each language. In this case we only have on `en-US`. Each language directory contains a `translations.dtd` file.
 
-For example  `&runlinktargetfinder;` in the `browser.xul` gets the translation in such a file.
+For example `&runlinktargetfinder;` in the `browser.xul` gets the translation in such a file.
 
 	$ touch locale/en-US/translations.dtd
 	echo '<!ENTITY runlinktargetfinder "Run Link Target Finder">' > locale/en-US/translations.dtd
@@ -345,5 +342,5 @@ You can style the buttons and other various aspects of your extension.
 	.link-target-finder-selected {
 		outline: 2px solid red !important;
 	}
-	
+
 You can pack used graphics in this directory. The example includes `status-bar.png` and `toolbar-large.png.` next to the `skin.css` file.
