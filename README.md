@@ -137,10 +137,12 @@ In the case of the example, create a file named `linktargetfinder@robertnyman.co
 For example (your profile id and project directory might differ):
 
 	## on OSX
-	echo "~/Development/projects/firefox-extension" > ~/Library/Application\ Support/Firefox/Profiles/ml3hqay8.development/linktargetfinder@robertnyman.com
+	mkdir -p ~/Library/Application\ Support/Firefox/Profiles/ml3hqay8.development/extensions
+	echo "~/Development/projects/firefox-extension" > ~/Library/Application\ Support/Firefox/Profiles/ml3hqay8.development/extensions/linktargetfinder@robertnyman.com
 	
 	## on Linux
-	echo "~/Development/projects/firefox-extension" > ~/.mozilla/firefox/ml3hqay8.development/linktargetfinder@robertnyman.com
+	mkdir -p ~/.mozilla/firefox/ml3hqay8.development/extensions
+	echo "~/Development/projects/firefox-extension" > ~/.mozilla/firefox/ml3hqay8.development/extensions/linktargetfinder@robertnyman.com
 
 ## Development ##
 
